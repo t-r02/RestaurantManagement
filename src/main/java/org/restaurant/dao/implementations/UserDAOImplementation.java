@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAOImpl implements UserDAO {
+public class UserDAOImplementation implements UserDAO {
 
     @Override
     public int addUserAndReturnId(User user) {

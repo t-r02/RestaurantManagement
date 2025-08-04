@@ -3,9 +3,9 @@ package org.restaurant.services;
 import org.restaurant.dao.interfaces.BillDAO;
 import org.restaurant.dao.interfaces.OrderItemDAO;
 import org.restaurant.dao.interfaces.MenuItemDAO;
-import org.restaurant.dao.implementations.BillDAOImpl;
-import org.restaurant.dao.implementations.OrderItemDAOImpl;
-import org.restaurant.dao.implementations.MenuItemDAOImpl;
+import org.restaurant.dao.implementations.BillDAOImplementation;
+import org.restaurant.dao.implementations.OrderItemDAOImplementation;
+import org.restaurant.dao.implementations.MenuItemDAOImplementation;
 import org.restaurant.models.Bill;
 import org.restaurant.models.OrderItem;
 import org.restaurant.models.MenuItem;
@@ -19,9 +19,9 @@ public class BillService {
     private final MenuItemDAO menuItemDAO;
 
     public BillService() {
-        this.billDAO = new BillDAOImpl();
-        this.orderItemDAO = new OrderItemDAOImpl();
-        this.menuItemDAO = new MenuItemDAOImpl();
+        this.billDAO = new BillDAOImplementation();
+        this.orderItemDAO = new OrderItemDAOImplementation();
+        this.menuItemDAO = new MenuItemDAOImplementation();
     }
 
     public int createBill(int orderId, String status) {

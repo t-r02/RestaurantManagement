@@ -1,7 +1,7 @@
 package org.restaurant.services;
 
 import org.restaurant.dao.interfaces.MenuItemDAO;
-import org.restaurant.dao.implementations.MenuItemDAOImpl;
+import org.restaurant.dao.implementations.MenuItemDAOImplementation;
 import org.restaurant.models.MenuItem;
 
 import java.util.List;
@@ -10,7 +10,7 @@ public class MenuService {
     private final MenuItemDAO menuItemDAO;
 
     public MenuService() {
-        this.menuItemDAO = new MenuItemDAOImpl();
+        this.menuItemDAO = new MenuItemDAOImplementation();
     }
 
     public boolean addMenuItem(String name, String category, double price) {

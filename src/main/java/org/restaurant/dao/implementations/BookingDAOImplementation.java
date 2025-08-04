@@ -1,24 +1,25 @@
 package org.restaurant.dao.implementations;
 
 import org.restaurant.config.DBConnection;
-import org.restaurant.dao.interfaces.OrderDAO;
-import org.restaurant.models.Order;
+import org.restaurant.dao.interfaces.BookingDAO;
+import org.restaurant.models.Booking;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDAOImpl implements OrderDAO {
+public class BookingDAOImplementation implements BookingDAO {
 
     @Override
-    public int addOrderAndReturnId(Order order) {
-        String sql = "INSERT INTO Orders (table_id, waiter_id, status) VALUES (?, ?, ?)";
+    public int addBookingAndReturnId(Booking booking) {
+        String sql = "INSERT INTO Bookings (table_id, customer_id, booking_datetime, status) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setInt(1, order.getTableId());
-            stmt.setInt(2, order.getWaiterId());
-            stmt.setString(3, order.getStatus());
+            stmt.setInt(1, booking.getTableId());
+            stmt.setInt(2, booking.getCustomerId());
+            stmt.setTimestamp(3, Timestamp.valueOf(booking.getBookingDatetime()));
+            stmt.setString(4, booking.getStatus());
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {
@@ -31,21 +32,18 @@ public class OrderDAOImpl implements OrderDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return -1; // Failure
+        return -1; // failure
     }
 
-
     @Override
-    public Order getOrderById(int orderId) {
-        String sql = "SELECT * FROM Orders WHERE order_id = ?";
+    public Booking getBookingById(int bookingId) {
+        String sql = "SELECT * FROM Bookings WHERE booking_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, orderId);
+            stmt.setInt(1, bookingId);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
-                return extractOrderFromResultSet(rs);
+                return extractBookingFromResultSet(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -54,116 +52,108 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public List<Order> getAllOrders() {
-        List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM Orders";
+    public List<Booking> getAllBookings() {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM Bookings";
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-
             while (rs.next()) {
-                orders.add(extractOrderFromResultSet(rs));
+                bookings.add(extractBookingFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return orders;
+        return bookings;
     }
 
     @Override
-    public List<Order> getOrdersByTableId(int tableId) {
-        List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM Orders WHERE table_id = ?";
+    public List<Booking> getBookingsByCustomerId(int customerId) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM Bookings WHERE customer_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, customerId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                bookings.add(extractBookingFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bookings;
+    }
 
+    @Override
+    public List<Booking> getBookingsByTableId(int tableId) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM Bookings WHERE table_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, tableId);
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
-                orders.add(extractOrderFromResultSet(rs));
+                bookings.add(extractBookingFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return orders;
+        return bookings;
     }
 
     @Override
-    public List<Order> getOrdersByWaiterId(int waiterId) {
-        List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM Orders WHERE waiter_id = ?";
+    public List<Booking> getBookingsByDate(String date) {
+        List<Booking> bookings = new ArrayList<>();
+        String sql = "SELECT * FROM Bookings WHERE DATE(booking_datetime) = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, waiterId);
+            stmt.setDate(1, Date.valueOf(date));
             ResultSet rs = stmt.executeQuery();
-
             while (rs.next()) {
-                orders.add(extractOrderFromResultSet(rs));
+                bookings.add(extractBookingFromResultSet(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return orders;
+        return bookings;
     }
 
     @Override
-    public List<Order> getOrdersByStatus(String status) {
-        List<Order> orders = new ArrayList<>();
-        String sql = "SELECT * FROM Orders WHERE status = ?";
+    public boolean updateBooking(Booking booking) {
+        String sql = "UPDATE Bookings SET table_id = ?, customer_id = ?, booking_datetime = ?, status = ? WHERE booking_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, status);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                orders.add(extractOrderFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return orders;
-    }
-
-    @Override
-    public boolean updateOrder(Order order) {
-        String sql = "UPDATE Orders SET table_id = ?, waiter_id = ?, status = ? WHERE order_id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, order.getTableId());
-            stmt.setInt(2, order.getWaiterId());
-            stmt.setString(3, order.getStatus());
-            stmt.setInt(4, order.getOrderId());
-
+            stmt.setInt(1, booking.getTableId());
+            stmt.setInt(2, booking.getCustomerId());
+            stmt.setTimestamp(3, Timestamp.valueOf(booking.getBookingDatetime()));
+            stmt.setString(4, booking.getStatus());
+            stmt.setInt(5, booking.getBookingId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
     @Override
-    public boolean deleteOrder(int orderId) {
-        String sql = "DELETE FROM Orders WHERE order_id = ?";
+    public boolean deleteBooking(int bookingId) {
+        String sql = "DELETE FROM Bookings WHERE booking_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, orderId);
+            stmt.setInt(1, bookingId);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
-    private Order extractOrderFromResultSet(ResultSet rs) throws SQLException {
-        return new Order(
-                rs.getInt("order_id"),
+    private Booking extractBookingFromResultSet(ResultSet rs) throws SQLException {
+        return new Booking(
+                rs.getInt("booking_id"),
                 rs.getInt("table_id"),
-                rs.getInt("waiter_id"),
+                rs.getInt("customer_id"),
+                rs.getTimestamp("booking_datetime").toLocalDateTime(),
                 rs.getString("status")
         );
     }

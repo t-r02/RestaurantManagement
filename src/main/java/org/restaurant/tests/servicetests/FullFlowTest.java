@@ -1,5 +1,7 @@
 package org.restaurant.tests.servicetests;
 
+import org.restaurant.dao.implementations.OrderDAOImplementation;
+import org.restaurant.dao.implementations.OrderItemDAOImplementation;
 import org.restaurant.models.OrderItem;
 import org.restaurant.models.User;
 import org.restaurant.services.*;
@@ -18,8 +20,8 @@ public class FullFlowTest {
         BookingService bookingService = new BookingService();
         MenuService menuService = new MenuService();
         OrderService orderService = new OrderService(
-                new org.restaurant.dao.implementations.OrderDAOImpl(),
-                new org.restaurant.dao.implementations.OrderItemDAOImpl()
+                new OrderDAOImplementation(),
+                new OrderItemDAOImplementation()
         );
         BillService billService = new BillService();
         PaymentService paymentService = new PaymentService();

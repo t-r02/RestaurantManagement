@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableDAOImpl implements TableDAO {
+public class TableDAOImplementation implements TableDAO {
 
     @Override
     public boolean addTable(Table table) {

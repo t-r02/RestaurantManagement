@@ -1,7 +1,7 @@
 package org.restaurant.services;
 
 import org.restaurant.dao.interfaces.UserDAO;
-import org.restaurant.dao.implementations.UserDAOImpl;
+import org.restaurant.dao.implementations.UserDAOImplementation;
 import org.restaurant.models.User;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public class UserService {
     private final UserDAO userDAO;
     public UserService() {
-        this.userDAO = new UserDAOImpl();
+        this.userDAO = new UserDAOImplementation();
     }
 
     // Register new user

@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuItemDAOImpl implements MenuItemDAO {
+public class MenuItemDAOImplementation implements MenuItemDAO {
 
     @Override
     public boolean addMenuItem(MenuItem menuItem) {

@@ -2,8 +2,8 @@ package org.restaurant.services;
 
 import org.restaurant.dao.interfaces.BookingDAO;
 import org.restaurant.dao.interfaces.TableDAO;
-import org.restaurant.dao.implementations.BookingDAOImpl;
-import org.restaurant.dao.implementations.TableDAOImpl;
+import org.restaurant.dao.implementations.BookingDAOImplementation;
+import org.restaurant.dao.implementations.TableDAOImplementation;
 import org.restaurant.models.Booking;
 import org.restaurant.models.Table;
 
@@ -16,8 +16,8 @@ public class BookingService {
     private final TableDAO tableDAO;
 
     public BookingService() {
-        this.bookingDAO = new BookingDAOImpl();
-        this.tableDAO = new TableDAOImpl();
+        this.bookingDAO = new BookingDAOImplementation();
+        this.tableDAO = new TableDAOImplementation();
     }
 
     public int bookTable(int tableId, int customerId, LocalDateTime bookingDateTime) {

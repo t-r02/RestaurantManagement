@@ -1,7 +1,7 @@
 package org.restaurant.services;
 
 import org.restaurant.dao.interfaces.TableDAO;
-import org.restaurant.dao.implementations.TableDAOImpl;
+import org.restaurant.dao.implementations.TableDAOImplementation;
 import org.restaurant.models.Table;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public class TableService {
     private final TableDAO tableDAO;
 
     public TableService() {
-        this.tableDAO = new TableDAOImpl();
+        this.tableDAO = new TableDAOImplementation();
     }
 
     public boolean addTable(int capacity, String status) {

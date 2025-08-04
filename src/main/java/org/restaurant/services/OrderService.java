@@ -2,8 +2,6 @@ package org.restaurant.services;
 
 import org.restaurant.dao.interfaces.OrderDAO;
 import org.restaurant.dao.interfaces.OrderItemDAO;
-import org.restaurant.dao.implementations.OrderDAOImpl;
-import org.restaurant.dao.implementations.OrderItemDAOImpl;
 import org.restaurant.models.Order;
 import org.restaurant.models.OrderItem;
 

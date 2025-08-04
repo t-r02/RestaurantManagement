@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderItemDAOImpl implements OrderItemDAO {
+public class OrderItemDAOImplementation implements OrderItemDAO {
 
     @Override
     public boolean addOrderItem(OrderItem orderItem) {

@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentDAOImpl implements PaymentDAO {
+public class PaymentDAOImplementation implements PaymentDAO {
 
     @Override
     public boolean addPayment(Payment payment) {

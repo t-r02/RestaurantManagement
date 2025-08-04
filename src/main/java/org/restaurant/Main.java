@@ -1,7 +1,8 @@
 package org.restaurant;
 
-import org.restaurant.dao.implementations.OrderDAOImpl;
-import org.restaurant.dao.implementations.OrderItemDAOImpl;
+import org.restaurant.dao.implementations.BillDAOImplementation;
+import org.restaurant.dao.implementations.OrderDAOImplementation;
+import org.restaurant.dao.implementations.OrderItemDAOImplementation;
 import org.restaurant.models.*;
 import org.restaurant.services.*;
 
@@ -18,8 +19,8 @@ public class Main {
     private static final BookingService bookingService = new BookingService();
     private static final MenuService menuService = new MenuService();
     private static final OrderService orderService = new OrderService(
-            new OrderDAOImpl(),
-            new OrderItemDAOImpl()
+            new OrderDAOImplementation(),
+            new OrderItemDAOImplementation()
     );
     private static final BillService billService = new BillService();
     private static final PaymentService paymentService = new PaymentService();
@@ -234,8 +235,8 @@ public class Main {
                 }
                 case 1 -> {
                     // Show orders without bills
-                    var allOrders = new org.restaurant.dao.implementations.OrderDAOImpl().getAllOrders();
-                    var allBills = new org.restaurant.dao.implementations.BillDAOImpl().getAllBills();
+                    var allOrders = new OrderDAOImplementation().getAllOrders();
+                    var allBills = new BillDAOImplementation().getAllBills();
 
                     var billedOrderIds = allBills.stream()
                             .map(Bill::getOrderId)
@@ -267,7 +268,7 @@ public class Main {
                 }
                 case 2 -> {
                     // Show unpaid bills
-                    var unpaidBills = new org.restaurant.dao.implementations.BillDAOImpl().getAllBills().stream()
+                    var unpaidBills = new BillDAOImplementation().getAllBills().stream()
                             .filter(b -> !"Paid".equalsIgnoreCase(b.getPaymentStatus()))
                             .toList();
 
@@ -278,7 +279,7 @@ public class Main {
 
                     System.out.println("\n💰 Unpaid Bills:");
                     unpaidBills.forEach(b -> {
-                        Order order = new org.restaurant.dao.implementations.OrderDAOImpl().getOrderById(b.getOrderId());
+                        Order order = new OrderDAOImplementation().getOrderById(b.getOrderId());
                         User customer = null;
                         if (order != null) {
                             var bookings = bookingService.getAllBookings().stream()
@@ -339,7 +340,7 @@ public class Main {
         }
 
         // Get customer who paid
-        Order order = new OrderDAOImpl().getOrderById(bill.getOrderId());
+        Order order = new OrderDAOImplementation().getOrderById(bill.getOrderId());
         String customerName = "Unknown";
         if (order != null) {
             Booking booking = bookingService.getAllBookings().stream()
@@ -360,7 +361,7 @@ public class Main {
         System.out.printf("%-20s %-10s %-10s %-10s%n", "Item", "Qty", "Price", "Total");
         System.out.println("---------------------------------------------------");
 
-        List<OrderItem> orderItems = new OrderItemDAOImpl()
+        List<OrderItem> orderItems = new OrderItemDAOImplementation()
                 .getOrderItemsByOrderId(bill.getOrderId());
         double grandTotal = 0;
         for (OrderItem oi : orderItems) {

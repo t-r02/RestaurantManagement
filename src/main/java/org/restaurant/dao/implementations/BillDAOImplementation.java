@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillDAOImpl implements BillDAO {
+public class BillDAOImplementation implements BillDAO {
 
     @Override
     public int addBillAndReturnId(Bill bill) {

@@ -1,11 +1,12 @@
 package org.restaurant.services;
 
+import org.restaurant.dao.implementations.TableDAOImplementation;
 import org.restaurant.dao.interfaces.BillDAO;
 import org.restaurant.dao.interfaces.OrderDAO;
 import org.restaurant.dao.interfaces.PaymentDAO;
-import org.restaurant.dao.implementations.BillDAOImpl;
-import org.restaurant.dao.implementations.OrderDAOImpl;
-import org.restaurant.dao.implementations.PaymentDAOImpl;
+import org.restaurant.dao.implementations.BillDAOImplementation;
+import org.restaurant.dao.implementations.OrderDAOImplementation;
+import org.restaurant.dao.implementations.PaymentDAOImplementation;
 import org.restaurant.models.Bill;
 import org.restaurant.models.Order;
 import org.restaurant.models.Payment;
@@ -19,9 +20,9 @@ public class PaymentService {
     private final OrderDAO orderDAO;
 
     public PaymentService() {
-        this.paymentDAO = new PaymentDAOImpl();
-        this.billDAO = new BillDAOImpl();
-        this.orderDAO = new OrderDAOImpl();
+        this.paymentDAO = new PaymentDAOImplementation();
+        this.billDAO = new BillDAOImplementation();
+        this.orderDAO = new OrderDAOImplementation();
     }
 
     public boolean processPayment(int billId, String method) {
@@ -57,7 +58,7 @@ public class PaymentService {
             if (order != null) {
                 order.setStatus("Served");
                 orderDAO.updateOrder(order);
-                org.restaurant.dao.interfaces.TableDAO tableDAO = new org.restaurant.dao.implementations.TableDAOImpl();
+                org.restaurant.dao.interfaces.TableDAO tableDAO = new TableDAOImplementation();
                 org.restaurant.models.Table table = tableDAO.getTableById(order.getTableId());
                 if (table != null) {
                     table.setStatus("Available");
