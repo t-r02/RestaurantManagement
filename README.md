@@ -175,31 +175,32 @@ The main entities are:
     payment_method VARCHAR(50) NOT NULL,
     payment_datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
-```
+    ```
+
 ---
 
 ### 🏗️ Setup Instructions
 1. Clone the repository:
-```bash
+    ```bash
     git clone https://github.com/t-r02/RestaurantManagement.git
     cd RestaurantManagement
-```
+    ```
 
 2. Update DBConnection.java with your PostgreSQL credentials:
 
-```java
-    private static final String URL = "jdbc:postgresql://localhost:5432/restaurant_db";
-    private static final String USER = "your_username";
-    private static final String PASSWORD = "your_password";
-```
+    ```java
+        private static final String URL = "jdbc:postgresql://localhost:5432/restaurant_db";
+        private static final String USER = "your_username";
+        private static final String PASSWORD = "your_password";
+    ```
 3. Compile the project:
-```bash
-    javac -cp .:postgresql-42.x.x.jar $(find src -name "*.java") -d out
-```
+    ```bash
+        javac -cp .:postgresql-42.x.x.jar $(find src -name "*.java") -d out
+    ```
 4. Run the application:
-```bash
-    java -cp out:postgresql-42.x.x.jar org.restaurant.Main
-```
+    ```bash
+        java -cp out:postgresql-42.x.x.jar org.restaurant.Main
+    ```
 ---
 
 ### 🔑 Default Users
