@@ -181,8 +181,8 @@ The main entities are:
 ### 🏗️ Setup Instructions
 1. Clone the repository:
 ```bash
-    git clone https://github.com/yourusername/restaurant-management.git
-    cd restaurant-management
+    git clone https://github.com/t-r02/RestaurantManagement.git
+    cd RestaurantManagement
 ```
 
 2. Update DBConnection.java with your PostgreSQL credentials:
