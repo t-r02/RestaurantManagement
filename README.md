@@ -93,8 +93,6 @@ The main entities are:
 - **Bills**
 - **Payments**
 
-A complete ERD and schema can be found in the `dbdiagram` code.
-
 ---
 
 ## 📋 Requirements
@@ -115,7 +113,69 @@ A complete ERD and schema can be found in the `dbdiagram` code.
    - Waiter
    - Kitchen
    - Customer
-
+   ```sql
+   - CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('Admin', 'Manager', 'Waiter', 'Kitchen Staff', 'Customer')),
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(100) NOT NULL
+    );
+    
+    CREATE TABLE tables (
+    table_id SERIAL PRIMARY KEY,
+    capacity INT NOT NULL CHECK (capacity > 0),
+    status VARCHAR(20) NOT NULL CHECK (status IN ('Available', 'Reserved', 'Occupied'))
+    );
+    
+    CREATE TABLE bookings (
+    booking_id SERIAL PRIMARY KEY,
+    table_id INT NOT NULL REFERENCES tables(table_id) ON DELETE CASCADE,
+    customer_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    booking_datetime TIMESTAMP NOT NULL,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('Reserved', 'Cancelled', 'Completed')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    CREATE TABLE menuitems (
+    item_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    category VARCHAR(50) NOT NULL CHECK (category IN ('Starter', 'Main Course', 'Dessert', 'Drink')),
+    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    table_id INT NOT NULL REFERENCES tables(table_id) ON DELETE CASCADE,
+    waiter_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    status VARCHAR(20) NOT NULL CHECK (status IN ('Pending', 'Prepared', 'Served')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    CREATE TABLE orderitems (
+    order_item_id SERIAL PRIMARY KEY,
+    order_id INT NOT NULL REFERENCES orders(order_id) ON DELETE CASCADE,
+    item_id INT NOT NULL REFERENCES menuitems(item_id) ON DELETE CASCADE,
+    quantity INT NOT NULL CHECK (quantity > 0)
+    );
+    
+    CREATE TABLE bills (
+    bill_id SERIAL PRIMARY KEY,
+    order_id INT NOT NULL UNIQUE REFERENCES orders(order_id) ON DELETE CASCADE, -- 1 bill per order
+    total_amount DECIMAL(10, 2) NOT NULL CHECK (total_amount >= 0),
+    payment_status VARCHAR(20) NOT NULL CHECK (payment_status IN ('Unpaid', 'Paid', 'Cancelled')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+    
+    CREATE TABLE payments (
+    payment_id SERIAL PRIMARY KEY,
+    bill_id INT NOT NULL UNIQUE REFERENCES bills(bill_id) ON DELETE CASCADE, -- 1 payment per bill
+    amount_paid DECIMAL(10, 2) NOT NULL CHECK (amount_paid >= 0),
+    payment_method VARCHAR(50) NOT NULL,
+    payment_datetime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+```
 ---
 
 ### 🏗️ Setup Instructions
@@ -167,4 +227,4 @@ A complete ERD and schema can be found in the `dbdiagram` code.
 - Data export in CSV/PDF format
 
 ### 📞 Contact
-For any issues or feature requests, please open an issue on the GitHub repository or contact the project maintainer.
+For any issues or feature requests, please open an issue on the GitHub repository (https://github.com/t-r02/RestaurantManagement.git) or contact the project maintainer.
