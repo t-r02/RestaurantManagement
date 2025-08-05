@@ -186,8 +186,18 @@ public class Main {
             if (ch == 1) {
                 System.out.print("Table ID: ");
                 int tid = getInt();
+                // Check if table has at least one booking with status "Reserved"
+                var reservedBookings = bookingService.getBookingsByTableId(tid).stream()
+                        .filter(b -> "Reserved".equalsIgnoreCase(b.getStatus()))
+                        .toList();
+                if (reservedBookings.isEmpty()) {
+                    System.out.println("Cannot place order. The table is not currently reserved.");
+                    continue; // Skip order placement
+                }
+
                 List<MenuItem> menu = menuService.getAllMenuItems();
                 List<OrderItem> items = new ArrayList<>();
+
                 while (true) {
                     menu.forEach(System.out::println);
                     System.out.print("Menu Item ID (0 to finish): ");

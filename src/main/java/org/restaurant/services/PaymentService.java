@@ -8,10 +8,12 @@ import org.restaurant.dao.implementations.BillDAOImplementation;
 import org.restaurant.dao.implementations.OrderDAOImplementation;
 import org.restaurant.dao.implementations.PaymentDAOImplementation;
 import org.restaurant.models.Bill;
+import org.restaurant.models.Booking;
 import org.restaurant.models.Order;
 import org.restaurant.models.Payment;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PaymentService {
 
@@ -58,15 +60,28 @@ public class PaymentService {
             if (order != null) {
                 order.setStatus("Served");
                 orderDAO.updateOrder(order);
+
                 org.restaurant.dao.interfaces.TableDAO tableDAO = new TableDAOImplementation();
                 org.restaurant.models.Table table = tableDAO.getTableById(order.getTableId());
                 if (table != null) {
                     table.setStatus("Available");
                     tableDAO.updateTable(table);
                 }
+
+                // Update booking status to "Completed"
+                BookingService bookingService = new BookingService();
+                List<Booking> bookings = bookingService.getBookingsByTableId(order.getTableId()).stream()
+                        .filter(b -> "Reserved".equalsIgnoreCase(b.getStatus()))
+                        .toList();
+
+                if (!bookings.isEmpty()) {
+                    Booking booking = bookings.get(0);
+                    booking.setStatus("Completed");
+                    bookingService.updateBooking(booking);
+                }
             }
 
-            System.out.println("Payment processed successfully. Bill marked as Paid, Order marked as Served, Table now Available.");
+            System.out.println("Payment processed successfully. Bill marked as Paid, Order marked as Served, Table now Available, Booking marked as Completed.");
             return true;
         }
         else {

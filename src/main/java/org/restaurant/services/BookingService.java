@@ -9,6 +9,7 @@ import org.restaurant.models.Table;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BookingService {
 
@@ -64,4 +65,17 @@ public class BookingService {
     public List<Booking> getAllBookings() {
         return bookingDAO.getAllBookings();
     }
+
+    public List<Booking> getReservedBookingsByCustomer(int customerId) {
+        return bookingDAO.getBookingsByCustomerId(customerId).stream()
+                .filter(b -> "Reserved".equalsIgnoreCase(b.getStatus()))
+                .collect(Collectors.toList());
+    }
+    public List<Booking> getBookingsByTableId(int tableId) {
+        return bookingDAO.getBookingsByTableId(tableId);
+    }
+    public boolean updateBooking(Booking booking) {
+        return bookingDAO.updateBooking(booking);
+    }
+
 }
